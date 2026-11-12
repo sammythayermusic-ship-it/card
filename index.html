@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sammy Thayer | Mowa Smart Properties</title>
+<meta name="description" content="Sammy Thayer, founder of Mowa Smart Properties in Portland, Maine. AI integration and automation for businesses. Save my contact info in one tap.">
+<meta name="theme-color" content="#0f1110">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Sammy Thayer | Mowa Smart Properties">
+<meta property="og:description" content="AI integration and automation for businesses. Portland, Maine. Tap to save my contact info.">
+<meta property="og:url" content="https://card.mowaproperties.com/">
+<meta property="og:image" content="https://card.mowaproperties.com/assets/share.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preload" href="assets/manrope.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face {
+    font-family: "Manrope";
+    src: url("assets/manrope.woff2") format("woff2");
+    font-weight: 200 800;
+    font-display: swap;
+  }
+
+  :root {
+    --ink: #0f1110;      /* page background */
+    --slate: #191c1a;    /* raised surfaces */
+    --line: #2b302d;     /* quiet borders */
+    --bone: #f2eee4;     /* main text */
+    --ash: #a3a8a2;      /* secondary text */
+    --gold: #d0a94f;     /* the accent */
+    --gold-deep: #b48d37;
+    --green: #17452f;    /* Mowa green, used sparingly */
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--bone);
+    font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .page {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: calc(16px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom));
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  a:focus-visible {
+    outline: 3px solid var(--bone);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Add to Contacts ---------- */
+
+  .save {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 62px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #dcb85f 0%, var(--gold) 55%, var(--gold-deep) 100%);
+    color: #14110a;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 10px 28px rgba(208, 169, 79, 0.18);
+    transition: transform 0.12s ease;
+  }
+
+  .save:active, .tile:active { transform: scale(0.975); }
+
+  .save svg { width: 24px; height: 24px; }
+
+  /* ---------- The card ---------- */
+
+  .card {
+    position: relative;
+    margin-top: 16px;
+    padding: 22px 22px 24px;
+    border-radius: 20px;
+    border: 1px solid rgba(208, 169, 79, 0.55);
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(23, 69, 47, 0.75) 0%, rgba(23, 69, 47, 0) 62%),
+      linear-gradient(165deg, #1d211e 0%, #131614 100%);
+    overflow: hidden;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .photo {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--gold);
+    display: block;
+    background: var(--slate);
+  }
+
+  .card-logo {
+    width: 104px;
+    height: auto;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .name {
+    margin: 22px 0 0;
+    font-size: 38px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .title {
+    margin: 8px 0 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .where {
+    margin: 4px 0 0;
+    font-size: 15px;
+    color: var(--ash);
+  }
+
+  /* ---------- Tap buttons ---------- */
+
+  .tiles {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 84px;
+    border-radius: 16px;
+    background: var(--slate);
+    border: 1px solid var(--line);
+    font-size: 15px;
+    font-weight: 700;
+    transition: transform 0.12s ease;
+  }
+
+  .tile svg, .tile .glyph {
+    width: 26px;
+    height: 26px;
+    color: var(--gold);
+  }
+
+  .tile .glyph {
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  /* ---------- Add to Apple Wallet ---------- */
+
+  .wallet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 58px;
+    margin-top: 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(208, 169, 79, 0.55);
+    font-size: 16.5px;
+    font-weight: 700;
+    transition: transform 0.12s ease;
+  }
+
+  .wallet[hidden] { display: none; }
+
+  .wallet:active { transform: scale(0.975); }
+
+  .wallet svg { width: 24px; height: 24px; color: var(--gold); }
+
+  /* ---------- What I do ---------- */
+
+  .work { margin-top: 36px; }
+
+  .work h2 {
+    margin: 0 4px 6px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .job {
+    padding: 18px 4px;
+    border-top: 1px solid var(--line);
+  }
+
+  .job:first-of-type { border-top-color: rgba(208, 169, 79, 0.55); }
+
+  .job h3 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .job .role {
+    margin: 3px 0 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .job .what {
+    margin: 8px 0 0;
+    font-size: 15.5px;
+    color: var(--ash);
+  }
+
+  /* ---------- Footer ---------- */
+
+  .foot {
+    margin-top: 12px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--ash);
+  }
+
+  @media (max-width: 350px) {
+    .name { font-size: 32px; }
+    .card-logo { width: 88px; }
+    .tile { font-size: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .save, .tile, .wallet { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <!-- No "download" attribute on purpose: on iPhone this opens the contact
+       card straight away with a Save option instead of a file download. -->
+  <a class="save" href="sammy-thayer.vcf">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9.5" cy="8" r="3.6"/><path d="M3 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M19 7.5v6M16 10.5h6"/></svg>
+    Add to Contacts
+  </a>
+
+  <header class="card">
+    <div class="card-top">
+      <img class="photo" src="assets/sammy.jpg" alt="Sammy Thayer" width="92" height="92">
+      <img class="card-logo" src="assets/mowa-logo.png" alt="Mowa Smart Properties" width="256" height="150">
+    </div>
+    <h1 class="name">Sammy Thayer</h1>
+    <p class="title">Founder, Mowa Smart Properties</p>
+    <p class="where">AI integration and automation<br>Portland, Maine</p>
+  </header>
+
+  <nav aria-label="Contact">
+    <ul class="tiles">
+      <li><a class="tile" href="tel:+12072284511">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.5h3l1.5 4.2-2 1.4a12 12 0 0 0 6.2 6.2l1.4-2 4.2 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.2 5.7a2 2 0 0 1 2-2.2z"/></svg>
+        Call</a></li>
+      <li><a class="tile" href="sms:+12072284511">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-8.5L7 20.5v-4H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z"/></svg>
+        Text</a></li>
+      <li><a class="tile" href="mailto:sammy@mowaproperties.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 7 8.5 6.5L20.5 7"/></svg>
+        Email</a></li>
+      <li><a class="tile" href="https://mowaproperties.com" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.8 5.5 3.8 9s-1.2 6.5-3.8 9c-2.6-2.5-3.8-5.5-3.8-9s1.2-6.5 3.8-9z"/></svg>
+        Website</a></li>
+      <li><a class="tile" href="https://www.linkedin.com/in/sammythayer" target="_blank" rel="noopener">
+        <span class="glyph" aria-hidden="true">in</span>
+        LinkedIn</a></li>
+      <li><a class="tile" href="https://x.com/sammy_sound207" target="_blank" rel="noopener">
+        <span class="glyph" aria-hidden="true">@</span>
+        X</a></li>
+    </ul>
+  </nav>
+
+  <!-- Stays hidden until sammy-thayer.pkpass has been uploaded next to this
+       file, and only shows on Apple devices. Nothing to edit here. -->
+  <a class="wallet" id="wallet" href="sammy-thayer.pkpass" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M15.5 14.5h2"/></svg>
+    Add to Apple Wallet
+  </a>
+
+  <section class="work">
+    <h2>What I do</h2>
+
+    <article class="job">
+      <h3>Mowa Smart Properties</h3>
+      <p class="role">Founder</p>
+      <p class="what">AI integration and automation for businesses, plus robotic lawn care, smart property care, and property management.</p>
+    </article>
+
+    <article class="job">
+      <h3>Shipyard Brewing Co. and Harborview Properties</h3>
+      <p class="role">Group Creative Director of AI &amp; Operations</p>
+      <p class="what">AI systems and operations work across both companies.</p>
+    </article>
+
+    <article class="job">
+      <h3>Audio engineer</h3>
+      <p class="role">About 10 years of live and studio sound</p>
+      <p class="what">Front of house mixing, production, and tour management for 12/OC.</p>
+    </article>
+  </section>
+
+  <footer class="foot">Mowa Smart Properties, Portland, Maine</footer>
+
+</main>
+<script>
+  // Show the Wallet button only on Apple devices, and only once the pass file exists.
+  (function () {
+    var link = document.getElementById("wallet");
+    if (!link || !/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) return;
+    fetch(link.getAttribute("href"), { method: "HEAD" })
+      .then(function (r) { if (r.ok) link.hidden = false; })
+      .catch(function () {});
+  })();
+</script>
+</body>
+</html>
