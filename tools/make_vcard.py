@@ -1,43 +1,68 @@
 #!/usr/bin/env python3
 """
-Rebuilds sammy-thayer.vcf (the file behind the "Add to Contacts" button).
+Rebuilds the contact files behind each card's "Add to Contacts" button.
 
-Change your info in the INFO block below, then run:
+Change a person's info in the CARDS block below, then run this from the
+site folder:
 
     python3 tools/make_vcard.py
 
-It rewrites sammy-thayer.vcf in the main folder, with the photo from
-assets/sammy.jpg baked in. Needs nothing installed beyond Python 3.
+It rewrites every card's .vcf file with that person's photo baked in.
+Needs nothing installed beyond Python 3.
 """
 import base64
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# ---------- Your info ----------
-INFO = {
-    "first": "Sammy",
-    "last": "Thayer",
-    "company": "Mowa Smart Properties",
-    "title": "Founder",
-    "phone": "+12072284511",
-    "email": "sammy@mowaproperties.com",
-    "website": "https://mowaproperties.com",
-    "linkedin": "https://www.linkedin.com/in/sammythayer",
-    "x": "https://x.com/sammy_sound207",
-    "city": "Portland",
-    "state": "ME",
-    "note": (
-        "Founder, Mowa Smart Properties: AI integration and automation for "
-        "businesses, robotic lawn care, smart property care, and property "
-        "management. Group Creative Director of AI & Operations for Shipyard "
-        "Brewing Co. and Harborview Properties. Audio engineer (FOH, "
-        "production, tour management for 12/OC). X: @sammy_sound207"
-    ),
-    "photo": "assets/sammy.jpg",
-    "output": "sammy-thayer.vcf",
-}
-# -------------------------------
+# ---------- One block per card ----------
+CARDS = [
+    {
+        "first": "Sammy",
+        "last": "Thayer",
+        "company": "Mowa Smart Properties",
+        "title": "Founder",
+        "phone": "+12072284511",
+        "email": "sammy@mowaproperties.com",
+        "links": [
+            ("Website", "https://mowaproperties.com"),
+            ("LinkedIn", "https://www.linkedin.com/in/sammythayer"),
+            ("X", "https://x.com/sammy_sound207"),
+        ],
+        "city": "Portland",
+        "state": "ME",
+        "note": (
+            "Founder, Mowa Smart Properties: AI integration and automation for "
+            "businesses, robotic lawn care, smart property care, and property "
+            "management. Group Creative Director of AI & Operations for Shipyard "
+            "Brewing Co. and Harborview Properties. Audio engineer (FOH, "
+            "production, tour management for 12/OC). X: @sammy_sound207"
+        ),
+        "photo": "assets/sammy.jpg",
+        "output": "sammy-thayer.vcf",
+    },
+    {
+        "first": "Frank",
+        "last": "Curran",
+        "company": "Harborview Properties",
+        "title": "Real Estate Agent",
+        "phone": "+12077762813",
+        "email": "fcurran@harborviewproperties.com",
+        "links": [
+            ("Website", "https://harborviewproperties.com"),
+            ("LinkedIn", "https://www.linkedin.com/in/frank-curran-2627a3202/"),
+        ],
+        "city": "Portland",
+        "state": "ME",
+        "note": (
+            "Real Estate Agent at Harborview Properties. Residential and "
+            "commercial real estate in Greater Portland, Maine."
+        ),
+        "photo": "frank-curran/assets/frank.jpg",
+        "output": "frank-curran/frank-curran.vcf",
+    },
+]
+# ----------------------------------------
 
 
 def esc(text):
@@ -65,8 +90,7 @@ def fold(line):
     return "\r\n ".join(parts)
 
 
-def build():
-    i = INFO
+def build(i):
     photo = base64.b64encode((ROOT / i["photo"]).read_bytes()).decode("ascii")
     lines = [
         "BEGIN:VCARD",
@@ -77,12 +101,10 @@ def build():
         f"TITLE:{esc(i['title'])}",
         f"TEL;TYPE=CELL,VOICE:{i['phone']}",
         f"EMAIL;TYPE=INTERNET,WORK:{i['email']}",
-        f"item1.URL:{i['website']}",
-        "item1.X-ABLabel:Website",
-        f"item2.URL:{i['linkedin']}",
-        "item2.X-ABLabel:LinkedIn",
-        f"item3.URL:{i['x']}",
-        "item3.X-ABLabel:X",
+    ]
+    for n, (label, url) in enumerate(i["links"], start=1):
+        lines += [f"item{n}.URL:{url}", f"item{n}.X-ABLabel:{label}"]
+    lines += [
         f"ADR;TYPE=WORK:;;;{esc(i['city'])};{esc(i['state'])};;USA",
         f"NOTE:{esc(i['note'])}",
         f"PHOTO;ENCODING=b;TYPE=JPEG:{photo}",
@@ -90,8 +112,9 @@ def build():
     ]
     out = ROOT / i["output"]
     out.write_bytes(("\r\n".join(fold(l) for l in lines) + "\r\n").encode("utf-8"))
-    print(f"Wrote {out.name} ({out.stat().st_size // 1024} KB)")
+    print(f"Wrote {i['output']} ({out.stat().st_size // 1024} KB)")
 
 
 if __name__ == "__main__":
-    build()
+    for card in CARDS:
+        build(card)
